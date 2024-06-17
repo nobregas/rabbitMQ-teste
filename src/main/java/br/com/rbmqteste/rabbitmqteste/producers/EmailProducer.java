@@ -30,7 +30,7 @@ public class EmailProducer {
         rabbitTemplate.convertAndSend(exchange, routingKey, mail);
 
         return new Message(
-                "Email enviado com sucesso",
+                "Email enfileirado com sucesso",
                 LocalDateTime.now()
         );
     }

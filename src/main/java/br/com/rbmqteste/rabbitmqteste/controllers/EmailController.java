@@ -32,7 +32,7 @@ public class EmailController {
     public ResponseEntity<Message> sendingEmail(@RequestBody @Valid EmailDTO emailDTO) {
         Message sentEmail =  emailProducer.send(emailDTO);
 
-        return new ResponseEntity<>(sentEmail, HttpStatus.CREATED);
+        return new ResponseEntity<>(sentEmail, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/box")
