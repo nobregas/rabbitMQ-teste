@@ -1,7 +1,9 @@
 package br.com.rbmqteste.rabbitmqteste.controllers;
 
 import br.com.rbmqteste.rabbitmqteste.models.dtos.EmailDTO;
+import br.com.rbmqteste.rabbitmqteste.models.dtos.Message;
 import br.com.rbmqteste.rabbitmqteste.models.entities.EmailEntity;
+import br.com.rbmqteste.rabbitmqteste.producers.EmailProducer;
 import br.com.rbmqteste.rabbitmqteste.services.EmailService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -19,16 +21,17 @@ import java.util.Optional;
 public class EmailController {
 
     private final EmailService emailService;
+    private final EmailProducer emailProducer;
 
-    public EmailController(EmailService emailService) {
+    public EmailController(EmailService emailService, EmailProducer emailProducer) {
         this.emailService = emailService;
+        this.emailProducer = emailProducer;
     }
 
     @PostMapping("/send")
-    public ResponseEntity<EmailEntity> sendingEmail(@RequestBody @Valid EmailDTO emailDTO) {
-        EmailEntity email = emailDTO.toEntity();
+    public ResponseEntity<Message> sendingEmail(@RequestBody @Valid EmailDTO emailDTO) {
+        Message sentEmail =  emailProducer.send(emailDTO);
 
-        EmailEntity sentEmail =  emailService.sendEmail(email);
         return new ResponseEntity<>(sentEmail, HttpStatus.CREATED);
     }
 
